@@ -1,0 +1,109 @@
+/* northernsky.app — the predawn ground from the app's Daybreak system.
+   Values mirror src/lib/tokens.ts in the app repo (daybreak.stations.predawn,
+   daybreak.breath, color.*OnDark, font). Change them there first. */
+:root{
+  --ground:#443579;                      /* daybreak.stations.predawn */
+  --ink:#F3F0EB;                         /* inkOnDark */
+  --ink-muted:rgb(243 240 235 / 62%);    /* inkMutedOnDark */
+  --line:rgb(243 240 235 / 20%);         /* lineOnDark */
+  --placeholder:rgb(243 240 235 / 38%);  /* placeholderOnDark */
+  --raised:rgb(46 46 61 / 82%);          /* surfaceRaisedOnDark */
+  --ink-inverse:#2A2418;                 /* inkInverseOnDark — ink on a white pill */
+  --font:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+  --tracking:-0.5px;                     /* font.displayTracking */
+  --breath-dur:46s;                      /* daybreak.breath.duration */
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;background:var(--ground)}
+body{
+  margin:0;min-height:100svh;
+  background:var(--ground);color:var(--ink);
+  font-family:var(--font);font-weight:500;font-size:17px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+a{color:inherit}
+
+/* The breath: a barely-lighter disc of the ground, drifting on a transform so
+   a held page never reads frozen. Transform and opacity only. */
+.breath{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.breath::before{
+  content:"";position:absolute;left:50%;top:50%;
+  width:95vmax;height:95vmax;margin:-47.5vmax 0 0 -47.5vmax;border-radius:50%;
+  background:radial-gradient(circle,rgb(255 255 255 / 5%) 0 22%,rgb(255 255 255 / 0) 70%);
+  opacity:.55;
+  animation:breath var(--breath-dur) ease-in-out infinite alternate;
+}
+@keyframes breath{
+  from{transform:translate3d(0,0,0) scale(1)}
+  to{transform:translate3d(6vw,-5vh,0) scale(1.12)}
+}
+@media (prefers-reduced-motion:reduce){.breath::before{animation:none}}
+
+/* ---------- shared chrome ---------- */
+.wrap{position:relative;z-index:1;width:100%;max-width:720px;margin:0 auto;padding:0 24px}
+.mark{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-weight:600;font-size:15px;letter-spacing:var(--tracking)}
+.mark svg{width:20px;height:20px;display:block}
+header{padding:22px 0}
+footer{padding:28px 0 max(28px,env(safe-area-inset-bottom));font-size:14px;color:var(--ink-muted)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;justify-content:space-between}
+footer nav{display:flex;gap:22px;flex-wrap:wrap}
+footer a{color:var(--ink-muted);text-decoration:none;border-bottom:1px solid var(--line)}
+footer a:hover{color:var(--ink);border-color:var(--ink)}
+
+/* ---------- the landing page: everything above the fold ---------- */
+.shell{position:relative;z-index:1;min-height:100svh;display:flex;flex-direction:column}
+.hero{flex:1;display:flex;align-items:center}
+.hero .wrap{max-width:640px;text-align:center;padding-top:16px;padding-bottom:32px}
+.eyebrow{margin:0 0 18px;font-size:15px;color:var(--ink-muted)}
+h1{
+  font-weight:600;letter-spacing:var(--tracking);line-height:1.12;
+  font-size:clamp(34px,7.2vw,52px);margin:0 0 18px;
+}
+.lede{margin:0 auto 34px;max-width:32em;font-size:clamp(17px,2.2vw,19px);line-height:1.45;color:var(--ink)}
+
+/* One pill: field and button. Controls on a dark station are white with ink. */
+.capture{margin:0 auto;max-width:460px}
+.row{
+  display:flex;gap:8px;padding:6px;border-radius:999px;
+  background:var(--raised);border:1px solid var(--line);
+}
+.row input{
+  flex:1;min-width:0;height:44px;padding:0 18px;border:0;border-radius:999px;
+  background:transparent;color:var(--ink);font:inherit;font-size:17px; /* never below 16px on iOS */
+  outline:none;
+}
+.row input::placeholder{color:var(--placeholder)}
+.row input:focus-visible{box-shadow:inset 0 0 0 1.5px var(--line)}
+.pill{
+  height:44px;padding:0 22px;border:0;border-radius:999px;white-space:nowrap;
+  background:var(--ink);color:var(--ink-inverse);font:inherit;font-weight:600;font-size:16px;
+  cursor:pointer;transition:opacity .2s ease,transform .2s ease;
+}
+.pill:hover{opacity:.92}
+.pill:active{transform:scale(.98)}
+.pill[disabled]{opacity:.6;cursor:default}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.note{margin:14px 0 0;font-size:14px;line-height:1.45;color:var(--ink-muted)}
+.note[data-state="done"]{color:var(--ink)}
+@media (max-width:480px){
+  .row{flex-direction:column;border-radius:28px;gap:6px}
+  .row input{text-align:center}
+  .pill{width:100%}
+}
+@media (prefers-reduced-motion:reduce){.pill{transition:none}}
+
+/* ---------- documents: privacy, terms, support ---------- */
+.doc{padding:24px 0 72px}
+.doc h1{font-size:clamp(32px,6vw,44px);margin:0 0 8px}
+.doc .updated{color:var(--ink-muted);font-size:15px;margin:0 0 36px}
+.doc h2{font-weight:600;font-size:22px;letter-spacing:var(--tracking);line-height:1.25;margin:40px 0 10px}
+.doc h3{font-weight:600;font-size:17px;margin:26px 0 8px}
+.doc p,.doc li{margin:0 0 14px;font-weight:400;color:var(--ink)}
+.doc li{margin-bottom:10px}
+.doc ul{padding-left:20px;margin:0 0 14px}
+.doc strong{font-weight:600}
+.doc a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line)}
+.doc a:hover{border-color:var(--ink)}
+.doc .short{padding:2px 0 2px 20px;border-left:2px solid var(--line);margin:24px 0}
+.doc .short p{font-weight:500;font-size:19px;line-height:1.4}
+.doc .addr{font-size:22px;font-weight:600;letter-spacing:var(--tracking);margin:0 0 6px}

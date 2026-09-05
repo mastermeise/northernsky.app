@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Northern Sky — Two questions, every morning.</title>
+<meta name="description" content="A morning check-in for iPhone. What's the one thing you'll do today? What are you thankful for? Tomorrow, it asks whether you did it. Coming soon.">
+<meta property="og:title" content="Northern Sky — Two questions, every morning.">
+<meta property="og:description" content="A morning check-in for iPhone. What's the one thing you'll do today? What are you thankful for? Tomorrow, it asks whether you did it.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://northernsky.app/">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#443579">
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/img/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css">
+</head>
+<body>
+<div class="breath" aria-hidden="true"></div>
+
+<div class="shell">
+  <header>
+    <div class="wrap">
+      <a class="mark" href="/" aria-label="Northern Sky">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M30 10 C31.5 24 34 27.5 48 30 C34 32.5 31.5 36 30 50 C28.5 36 26 32.5 12 30 C26 27.5 28.5 24 30 10 Z" fill="currentColor"/><path d="M46 9 C46.5 12.6 47.4 13.5 51 14 C47.4 14.5 46.5 15.4 46 19 C45.5 15.4 44.6 14.5 41 14 C44.6 13.5 45.5 12.6 46 9 Z" fill="currentColor" opacity=".8"/></svg>
+        Northern Sky
+      </a>
+    </div>
+  </header>
+
+  <main class="hero">
+    <div class="wrap">
+      <p class="eyebrow">Coming to iPhone</p>
+      <h1>Two questions, every morning.</h1>
+      <p class="lede">What's the one thing you'll do today? What are you thankful for? Tomorrow, it asks whether you did it.</p>
+
+      <form class="capture" id="capture" novalidate>
+        <div class="row">
+          <label class="hp" for="website">Leave this empty</label>
+          <input class="hp" type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+          <input type="email" id="email" name="email" placeholder="Your email" required
+                 autocomplete="email" autocapitalize="off" spellcheck="false" aria-label="Your email">
+          <button class="pill" type="submit" data-goatcounter-click="waitlist">Tell me when it's out</button>
+        </div>
+        <p class="note" id="note" aria-live="polite">One note when it's out, the occasional one after. Unsubscribe anytime.</p>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>© 2026 Brian Meise</span>
+      <nav>
+        <a href="/privacy.html">Privacy</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/support.html">Support</a>
+      </nav>
+    </div>
+  </footer>
+</div>
+
+<script>
+// The waitlist is one table in the app's Supabase project. The key is the
+// project's publishable identifier, not a secret; the table grants anon
+// insert only, and RLS lets nothing be read back. A duplicate email comes
+// back 409 and is treated as already on the list.
+(function () {
+  var URL = 'https://xiwggtpiqnsiargtiham.supabase.co/rest/v1/waitlist';
+  var KEY = 'sb_publishable_mRfgL_a6vdINKT1QcsDXOg_ihpGNKJz';
+  var COPY = {
+    expectation: 'One note when it’s out, the occasional one after. Unsubscribe anytime.',
+    invalid: 'That doesn’t look like an email address.',
+    done: 'You’re on the list.',
+    failed: 'That didn’t send. Try once more.'
+  };
+  var form = document.getElementById('capture');
+  var email = document.getElementById('email');
+  var note = document.getElementById('note');
+  var button = form.querySelector('.pill');
+
+  function say(state, text) { note.dataset.state = state; note.textContent = text; }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (form.website.value) return;               // honeypot
+    var value = email.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) { say('error', COPY.invalid); email.focus(); return; }
+    button.disabled = true;
+    fetch(URL, {
+      method: 'POST',
+      headers: {
+        'apikey': KEY,
+        'Authorization': 'Bearer ' + KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ email: value.toLowerCase(), source: 'northernsky.app' })
+    }).then(function (r) {
+      if (r.ok || r.status === 409) { say('done', COPY.done); form.reset(); }
+      else { say('error', COPY.failed); button.disabled = false; }
+    }).catch(function () { say('error', COPY.failed); button.disabled = false; });
+  });
+  email.addEventListener('input', function () { if (note.dataset.state === 'error') say('', COPY.expectation); });
+})();
+</script>
+
+<!-- GoatCounter: cookieless page counts, no personal data. Disclosed under
+     "This website" in /privacy.html; change both together. -->
+<script data-goatcounter="https://northernsky.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
