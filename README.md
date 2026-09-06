@@ -24,6 +24,23 @@ app's register (`src/lib/copy.ts`): sentence case, no exclamation marks, never c
 Draft status: the headline, the lede, the button label, and the expectation sentence are DRAFT
 pending sign-off, like the app's own door copy.
 
+## The sky wakes
+
+The landing page plays a four-second wake on load (`body.wake`, ruled 2026-09-05 from the
+"First light" concept): the night settles to predawn, a low glow of the **lifting** station rises
+from the bottom edge, 150 stars wake at their own moments, Polaris blooms high right with a warm
+glow, the wordmark resolves letter by letter, then each block rises in order. Afterwards the
+twinkle, the glow's pulse, the breath and the horizon drift never stop.
+
+- Transform and opacity only, like the app: layers crossfade, nothing animates a gradient stop.
+- The mark sits high right on every page, where the star sits on the icon. The other pages get
+  the resting glow and no intro.
+- Stars are seeded by the script in `index.html`; each carries its numbers as custom properties
+  the stylesheet reads. Under `prefers-reduced-motion` every intro is skipped and the page sits
+  at rest, stars included.
+- The glow was ruled at about a third under the first cut; the concepts and the tuning live in
+  the "Northern Sky Wake-Up" artifact.
+
 ## Email capture
 
 The form POSTs to the app's Supabase project (`waitlist` table, migration

@@ -3,6 +3,9 @@
    daybreak.breath, color.*OnDark, font). Change them there first. */
 :root{
   --ground:#443579;                      /* daybreak.stations.predawn */
+  --night:#2B2352;                       /* the sky before it wakes — predawn, deeper; the page's own */
+  --lifting:#5C58B0;                     /* daybreak.stations.lifting — the low glow */
+  --star-warm:#FFF3D6;                   /* a few stars carry the slight yellow the brand brief allows */
   --ink:#F3F0EB;                         /* inkOnDark */
   --ink-muted:rgb(243 240 235 / 62%);    /* inkMutedOnDark */
   --line:rgb(243 240 235 / 20%);         /* lineOnDark */
@@ -23,6 +26,45 @@ body{
 }
 a{color:inherit}
 
+/* ---------- the sky ----------
+   Transform and opacity only, like the app. Layers crossfade on opacity and drift on a
+   transform; nothing animates a gradient, a size, or a position.
+
+   The landing page wakes on load (body.wake): the night settles to predawn, a low glow of
+   the lifting station rises from the bottom edge, the stars wake at their own moments,
+   Polaris blooms high right, the wordmark resolves letter by letter, then the page rises.
+   About four seconds, then the twinkle, the glow's pulse, the breath and the horizon drift
+   never stop. Under reduced motion every intro is skipped and the page sits at rest. */
+.sky{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.sky .layer{position:absolute;inset:0}
+.night{background:var(--night);opacity:0}
+.wake .night{animation:settle 2.2s ease-out 0s both}
+@keyframes settle{from{opacity:1}to{opacity:0}}
+.horizon{
+  inset:-20%;
+  background:radial-gradient(ellipse 70% 45% at 50% 100%,var(--lifting) 0%,rgb(92 88 176 / 55%) 35%,rgb(92 88 176 / 0) 72%);
+  opacity:.95;
+  animation:horizon-drift 52s ease-in-out 3.3s infinite alternate;
+}
+.wake .horizon{animation:appear 2.4s ease .9s both,horizon-drift 52s ease-in-out 3.3s infinite alternate}
+@keyframes appear{from{opacity:0}}
+@keyframes horizon-drift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-4vw,-3vh,0) scale(1.08)}}
+
+/* Stars: each one owns its position, size, base brightness, wake delay and twinkle period
+   (set as custom properties by the script). Wake is opacity+scale from nothing; twinkle
+   takes over the instant wake ends. A star at rest is simply visible. */
+.stars{position:absolute;inset:0}
+.star{
+  position:absolute;left:var(--x);top:var(--y);width:var(--s);height:var(--s);border-radius:50%;
+  background:var(--ink);opacity:var(--o);will-change:opacity,transform;
+  animation:twinkle var(--t) ease-in-out var(--d2) infinite alternate;
+}
+.wake .star{animation:wake 1.4s cubic-bezier(.2,.7,.2,1) var(--d) both,twinkle var(--t) ease-in-out var(--d2) infinite alternate}
+.star.bright{box-shadow:0 0 6px 1px rgb(243 240 235 / 45%)}
+.star.warm{background:var(--star-warm)}
+@keyframes wake{from{opacity:0;transform:scale(.3)}to{opacity:var(--o);transform:scale(1)}}
+@keyframes twinkle{from{opacity:var(--o)}to{opacity:calc(var(--o) * .22)}}
+
 /* The breath: a barely-lighter disc of the ground, drifting on a transform so
    a held page never reads frozen. Transform and opacity only. */
 .breath{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
@@ -37,13 +79,32 @@ a{color:inherit}
   from{transform:translate3d(0,0,0) scale(1)}
   to{transform:translate3d(6vw,-5vh,0) scale(1.12)}
 }
-@media (prefers-reduced-motion:reduce){.breath::before{animation:none}}
+@media (prefers-reduced-motion:reduce){
+  .breath::before,.night,.horizon,.star,.polaris svg,.glow,.word span,.rise{animation:none !important}
+}
 
 /* ---------- shared chrome ---------- */
 .wrap{position:relative;z-index:1;width:100%;max-width:720px;margin:0 auto;padding:0 24px}
-.mark{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-weight:600;font-size:15px;letter-spacing:var(--tracking)}
-.mark svg{width:20px;height:20px;display:block}
+/* The mark sits high right, where the star sits on the icon: wordmark, then Polaris with a
+   warm glow behind it. The glow blooms on the landing page and then breathes; on the other
+   pages it simply rests. */
 header{padding:22px 0}
+header .wrap{display:flex;justify-content:flex-end}
+.mark{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);font-weight:600;font-size:15px;letter-spacing:var(--tracking)}
+.word{display:inline-flex}
+.word span{display:inline-block;white-space:pre}
+.wake .word span{animation:resolve .7s cubic-bezier(.2,.7,.2,1) calc(2.35s + var(--i) * 45ms) both}
+@keyframes resolve{from{opacity:0;transform:translate3d(0,5px,0)}}
+.polaris{position:relative;width:26px;height:26px;display:grid;place-items:center}
+.polaris svg{position:relative;width:26px;height:26px;display:block}
+.wake .polaris svg{animation:bloom 1.5s cubic-bezier(.2,.7,.2,1) 1.7s both}
+@keyframes bloom{from{opacity:0;transform:scale(.4)}}
+.glow{position:absolute;left:50%;top:50%;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;
+  background:radial-gradient(circle,rgb(255 244 214 / 42%) 0%,rgb(245 206 140 / 13%) 26%,rgb(245 206 140 / 0) 66%);
+  opacity:.55;animation:pulse 7s ease-in-out 4.3s infinite alternate}
+.wake .glow{animation:flare 2.6s ease 1.7s both,pulse 7s ease-in-out 4.3s infinite alternate}
+@keyframes flare{0%{opacity:0;transform:scale(.3)}55%{opacity:.85;transform:scale(1.25)}100%{opacity:.55;transform:scale(1)}}
+@keyframes pulse{from{opacity:.55;transform:scale(1)}to{opacity:.78;transform:scale(1.1)}}
 footer{padding:28px 0 max(28px,env(safe-area-inset-bottom));font-size:14px;color:var(--ink-muted)}
 footer .wrap{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;justify-content:space-between}
 footer nav{display:flex;gap:22px;flex-wrap:wrap}
@@ -52,11 +113,14 @@ footer a:hover{color:var(--ink);border-color:var(--ink)}
 
 /* ---------- the landing page: everything above the fold ---------- */
 .shell{position:relative;z-index:1;min-height:100svh;display:flex;flex-direction:column}
+/* The page follows the star up: each block carries its own --i. At rest it is simply there. */
+.wake .rise{animation:rise 1s cubic-bezier(.2,.7,.2,1) calc(3.05s + var(--i) * 150ms) both}
+@keyframes rise{from{opacity:0;transform:translate3d(0,14px,0)}}
 .hero{flex:1;display:flex;align-items:center}
 .hero .wrap{max-width:640px;text-align:center;padding-top:16px;padding-bottom:32px}
 .eyebrow{margin:0 0 18px;font-size:15px;color:var(--ink-muted)}
 h1{
-  font-weight:600;letter-spacing:var(--tracking);line-height:1.12;
+  font-weight:600;letter-spacing:var(--tracking);line-height:1.12;text-wrap:balance;
   font-size:clamp(34px,7.2vw,52px);margin:0 0 18px;
 }
 .lede{margin:0 auto 34px;max-width:32em;font-size:clamp(17px,2.2vw,19px);line-height:1.45;color:var(--ink)}
@@ -85,10 +149,14 @@ h1{
 .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 .note{margin:14px 0 0;font-size:14px;line-height:1.45;color:var(--ink-muted)}
 .note[data-state="done"]{color:var(--ink)}
+/* Narrow screens: two stacked pills, same width, same height — the dark field over the white
+   button, the way the app stacks its yesterday answers. flex:none matters: in a column, flex:1's
+   zero basis beats the height and the field collapses to its text. */
 @media (max-width:480px){
-  .row{flex-direction:column;border-radius:28px;gap:6px}
-  .row input{text-align:center}
-  .pill{width:100%}
+  .row{flex-direction:column;gap:10px;padding:0;background:transparent;border:0;border-radius:0}
+  .row input{flex:none;width:100%;height:48px;text-align:center;border:1px solid var(--line);background:var(--raised)}
+  .row input:focus-visible{box-shadow:none;border-color:var(--ink-muted)}
+  .pill{width:100%;height:48px}
 }
 @media (prefers-reduced-motion:reduce){.pill{transition:none}}
 
