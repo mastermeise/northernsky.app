@@ -1,26 +1,34 @@
-/* northernsky.app — the predawn ground from the app's Daybreak system.
-   Values mirror src/lib/tokens.ts in the app repo (daybreak.stations.predawn,
-   daybreak.breath, color.*OnDark, font). Change them there first. */
+/* northernsky.app — the day sky from the app's Daybreak system, C2 Deep (ruled 2026-09-06).
+   Values mirror src/lib/tokens.ts in the app repo (daybreak.stations.day and .predawn,
+   daybreak.breath, color.*, font). Change them there first. The day station is a light
+   station, so the ink is the day set and the pill is ink with white text. */
 :root{
-  --ground:#443579;                      /* daybreak.stations.predawn */
-  --night:#2B2352;                       /* the sky before it wakes — predawn, deeper; the page's own */
-  --lifting:#5C58B0;                     /* daybreak.stations.lifting — the low glow */
+  --sky-top:#2F63BE;                     /* daybreak.stations.day.sky.stops[0] — overhead */
+  --sky-mid:#5E97DE;                     /* stops[1] — the band the words sit in */
+  --sky-low:#B9D7F0;                     /* stops[2] — the horizon */
+  --sun:#FFDE7C;                         /* day.sky.sun.color */
+  --sun-rim:rgb(255 245 214 / 45%);      /* day.sky.sun.rim at 45% — the edge goes through cream, never grey */
+  --sun-out:rgb(255 245 214 / 0);
+  --night-top:#121A48;                   /* daybreak.stations.predawn.sky.stops — the sky before it wakes */
+  --night-mid:#1F2C74;
+  --night-low:#3C4E9E;
+  --star:#F3F0EB;                        /* inkOnDark — the stars belong to the night layer */
   --star-warm:#FFF3D6;                   /* a few stars carry the slight yellow the brand brief allows */
-  --ink:#F3F0EB;                         /* inkOnDark */
-  --ink-muted:rgb(243 240 235 / 62%);    /* inkMutedOnDark */
-  --line:rgb(243 240 235 / 20%);         /* lineOnDark */
-  --placeholder:rgb(243 240 235 / 38%);  /* placeholderOnDark */
-  --raised:rgb(46 46 61 / 82%);          /* surfaceRaisedOnDark */
-  --ink-inverse:#2A2418;                 /* inkInverseOnDark — ink on a white pill */
+  --ink:#1A1A18;                         /* ink */
+  --ink-muted:rgb(74 52 64 / 60%);       /* inkMuted */
+  --line:rgb(74 52 64 / 18%);            /* line */
+  --placeholder:rgb(74 52 64 / 35%);     /* placeholder */
+  --raised:#FFFFFF;                      /* surfaceRaised */
+  --ink-inverse:#FBFAF8;                 /* inkInverse — white on the ink pill */
   --font:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
   --tracking:-0.5px;                     /* font.displayTracking */
   --breath-dur:46s;                      /* daybreak.breath.duration */
 }
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;background:var(--ground)}
+html{-webkit-text-size-adjust:100%;background:var(--sky-mid)}
 body{
   margin:0;min-height:100svh;
-  background:var(--ground);color:var(--ink);
+  background:linear-gradient(to bottom,var(--sky-top) -6%,var(--sky-mid) 54%,var(--sky-low) 104%);color:var(--ink);
   font-family:var(--font);font-weight:500;font-size:17px;line-height:1.5;
   -webkit-font-smoothing:antialiased;overflow-x:hidden;
 }
@@ -28,35 +36,47 @@ a{color:inherit}
 
 /* ---------- the sky ----------
    Transform and opacity only, like the app. Layers crossfade on opacity and drift on a
-   transform; nothing animates a gradient, a size, or a position.
+   transform; nothing animates a gradient, a size, or a position. The stops are the app's
+   day station; the sun is a radial whose centre sits below the frame, drawn with the ramp
+   DaybreakGround and the icon draw: the core, the rim at 34%, nothing at 72%.
 
-   The landing page wakes on load (body.wake): the night settles to predawn, a low glow of
-   the lifting station rises from the bottom edge, the stars wake at their own moments,
-   Polaris blooms high right, the wordmark resolves letter by letter, then the page rises.
-   About four seconds, then the twinkle, the glow's pulse, the breath and the horizon drift
-   never stop. Under reduced motion every intro is skipped and the page sits at rest. */
+   The landing page wakes on load (body.wake): it opens on the predawn sky with the stars
+   out, the night thins over three seconds and the day comes through it, the sun rises at
+   the horizon, the stars go with the night, Polaris blooms high right, the wordmark
+   resolves letter by letter, then the page rises. Afterwards the sun's drift, the glow's
+   pulse and the breath never stop. Under reduced motion every intro is skipped and the
+   page sits at rest, in daylight. */
 .sky{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
 .sky .layer{position:absolute;inset:0}
-.night{background:var(--night);opacity:0}
-.wake .night{animation:settle 2.2s ease-out 0s both}
-@keyframes settle{from{opacity:1}to{opacity:0}}
+.day{background:linear-gradient(to bottom,var(--sky-top) -6%,var(--sky-mid) 54%,var(--sky-low) 104%)}
 .horizon{
-  inset:-20%;
-  background:radial-gradient(ellipse 70% 45% at 50% 100%,var(--lifting) 0%,rgb(92 88 176 / 55%) 35%,rgb(92 88 176 / 0) 72%);
-  opacity:.95;
+  background:radial-gradient(circle 72vmax at 50% 106%,var(--sun) 0%,var(--sun-rim) 34%,var(--sun-out) 72%);
   animation:horizon-drift 52s ease-in-out 3.3s infinite alternate;
 }
-.wake .horizon{animation:appear 2.4s ease .9s both,horizon-drift 52s ease-in-out 3.3s infinite alternate}
+.wake .horizon{animation:appear 2.6s ease .9s both,horizon-drift 52s ease-in-out 3.3s infinite alternate}
 @keyframes appear{from{opacity:0}}
-@keyframes horizon-drift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-4vw,-3vh,0) scale(1.08)}}
+@keyframes horizon-drift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-3vw,-2vh,0) scale(1.06)}}
+/* The predawn sky, with its own first warmth below the horizon: predawn.sky.sun at strength .65,
+   core → mid at 28% → rim at 54% → nothing at 76%. Sits on top, gone at rest. */
+.night{
+  opacity:0;
+  background:
+    radial-gradient(circle 38vmax at 50% 124%,rgb(240 158 90 / 65%) 0%,rgb(176 98 138 / 55%) 28%,rgb(90 76 152 / 27%) 54%,rgb(90 76 152 / 0) 76%),
+    linear-gradient(to bottom,var(--night-top) -6%,var(--night-mid) 54%,var(--night-low) 104%);
+}
+.wake .night{animation:settle 3.4s ease-in-out 0s both}
+@keyframes settle{from{opacity:1}to{opacity:0}}
 
 /* Stars: each one owns its position, size, base brightness, wake delay and twinkle period
    (set as custom properties by the script). Wake is opacity+scale from nothing; twinkle
-   takes over the instant wake ends. A star at rest is simply visible. */
-.stars{position:absolute;inset:0}
+   takes over the instant wake ends. They belong to the night: the field goes out with it
+   during the wake, and at rest (other pages, reduced motion) there are none. */
+.stars{position:absolute;inset:0;opacity:0}
+.wake .stars{animation:starsout 1.4s ease 2.4s both}
+@keyframes starsout{from{opacity:1}to{opacity:0}}
 .star{
   position:absolute;left:var(--x);top:var(--y);width:var(--s);height:var(--s);border-radius:50%;
-  background:var(--ink);opacity:var(--o);will-change:opacity,transform;
+  background:var(--star);opacity:var(--o);will-change:opacity,transform;
   animation:twinkle var(--t) ease-in-out var(--d2) infinite alternate;
 }
 .wake .star{animation:wake 1.4s cubic-bezier(.2,.7,.2,1) var(--d) both,twinkle var(--t) ease-in-out var(--d2) infinite alternate}
@@ -80,7 +100,7 @@ a{color:inherit}
   to{transform:translate3d(6vw,-5vh,0) scale(1.12)}
 }
 @media (prefers-reduced-motion:reduce){
-  .breath::before,.night,.horizon,.star,.polaris svg,.glow,.word span,.rise{animation:none !important}
+  .breath::before,.night,.horizon,.stars,.star,.polaris svg,.glow,.word span,.rise{animation:none !important}
 }
 
 /* ---------- shared chrome ---------- */

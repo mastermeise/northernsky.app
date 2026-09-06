@@ -17,9 +17,13 @@ Marketing and legal site for **Northern Sky**, a morning check-in for iPhone (th
 
 ## Where the values come from
 
-The ground is the app's Daybreak **predawn** station and its breath drift; the ink, line, and
-placeholder colours are the `*OnDark` set; the face is Plus Jakarta Sans 400/500/600. All of it
-mirrors `src/lib/tokens.ts` in the app repo — change there first, then here. The copy follows the
+The ground is the app's Daybreak **day** station — C2 Deep, ruled 2026-09-06: cobalt overhead,
+butter along the horizon, the sun a radial whose centre sits below the frame — and its breath
+drift; `day` is a light station, so the ink, line and placeholder colours are the day set and the
+pill is ink with white text; the face is Plus Jakarta Sans 400/500/600. All of it mirrors
+`src/lib/tokens.ts` in the app repo (`daybreak.stations.day`, `.predawn` for the wake's night) —
+change there first, then here. The favicons and the touch icon are the app icon, downsized
+(`npm run icon` in the app repo draws it from the same tokens). The copy follows the
 app's register (`src/lib/copy.ts`): sentence case, no exclamation marks, never cheerful at you.
 Draft status: the headline, the lede, the button label, and the expectation sentence are DRAFT
 pending sign-off, like the app's own door copy.
@@ -27,17 +31,19 @@ pending sign-off, like the app's own door copy.
 ## The sky wakes
 
 The landing page plays a four-second wake on load (`body.wake`, ruled 2026-09-05 from the
-"First light" concept): the night settles to predawn, a low glow of the **lifting** station rises
-from the bottom edge, 150 stars wake at their own moments, Polaris blooms high right with a warm
-glow, the wordmark resolves letter by letter, then each block rises in order. Afterwards the
-twinkle, the glow's pulse, the breath and the horizon drift never stop.
+"First light" concept, re-choreographed 2026-09-06 as a sunrise): the page opens on the
+**predawn** sky with 150 stars out, the night thins over three seconds and the day comes through
+it, the sun rises at the horizon, the stars go with the night, Polaris blooms high right with a
+warm glow, the wordmark resolves letter by letter, then each block rises in order. Afterwards the
+sun's drift, the glow's pulse and the breath never stop.
 
 - Transform and opacity only, like the app: layers crossfade, nothing animates a gradient stop.
 - The mark sits high right on every page, where the star sits on the icon. The other pages get
   the resting glow and no intro.
 - Stars are seeded by the script in `index.html`; each carries its numbers as custom properties
-  the stylesheet reads. Under `prefers-reduced-motion` every intro is skipped and the page sits
-  at rest, stars included.
+  the stylesheet reads. They belong to the night layer: gone once the day is through, and absent
+  at rest. Under `prefers-reduced-motion` every intro is skipped and the page sits at rest, in
+  daylight.
 - The glow was ruled at about a third under the first cut; the concepts and the tuning live in
   the "Northern Sky Wake-Up" artifact.
 
