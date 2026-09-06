@@ -28,12 +28,16 @@
   --breath-dur:46s;                      /* daybreak.breath.duration */
 }
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;background:var(--sky-mid)}
+/* Nothing may scroll sideways. The mark's glow spills past the right edge of a phone, and iOS
+   Safari lets a finger scroll into anything that overflows unless the overflow is clipped on
+   both html and body — `hidden` on body alone is not honoured there. `clip` is the modern
+   value (iOS 16+); `hidden` stays as the fallback and the later line wins where clip exists. */
+html{-webkit-text-size-adjust:100%;background:var(--sky-mid);overflow-x:hidden;overflow-x:clip}
 body{
   margin:0;min-height:100svh;
   background:linear-gradient(to bottom,var(--sky-top) -6%,var(--sky-mid) 54%,var(--sky-low) 104%);color:var(--ink);
   font-family:var(--font);font-weight:500;font-size:17px;line-height:1.5;
-  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;overflow-x:clip;
 }
 a{color:inherit}
 
@@ -118,12 +122,12 @@ a{color:inherit}
    pages it simply rests. */
 header{padding:22px 0}
 header .wrap{display:flex;justify-content:flex-end}
-.mark{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);font-weight:600;font-size:15px;letter-spacing:var(--tracking)}
+.mark{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--star);font-weight:600;font-size:15px;letter-spacing:var(--tracking)} /* the whole mark is white on every sky */
 .word{display:inline-flex}
 .word span{display:inline-block;white-space:pre}
 .wake .word span{animation:resolve .7s cubic-bezier(.2,.7,.2,1) calc(2.35s + var(--i) * 45ms) both}
 @keyframes resolve{from{opacity:0;transform:translate3d(0,5px,0)}}
-.polaris{position:relative;width:26px;height:26px;display:grid;place-items:center;color:var(--star)} /* the star stays white on every sky; the wordmark keeps the page's ink */
+.polaris{position:relative;width:26px;height:26px;display:grid;place-items:center}
 .polaris svg{position:relative;width:26px;height:26px;display:block}
 .wake .polaris svg{animation:bloom 1.5s cubic-bezier(.2,.7,.2,1) 1.7s both}
 @keyframes bloom{from{opacity:0;transform:scale(.4)}}
@@ -140,7 +144,7 @@ footer a{color:var(--ink-muted);text-decoration:none;border-bottom:1px solid var
 footer a:hover{color:var(--ink);border-color:var(--ink)}
 
 /* ---------- the landing page: everything above the fold ---------- */
-.shell{position:relative;z-index:1;min-height:100svh;display:flex;flex-direction:column}
+.shell{position:relative;z-index:1;min-height:100svh;display:flex;flex-direction:column;overflow-x:clip}
 /* The page follows the star up: each block carries its own --i. At rest it is simply there. */
 .wake .rise{animation:rise 1s cubic-bezier(.2,.7,.2,1) calc(3.4s + var(--i) * 150ms) both}
 @keyframes rise{from{opacity:0;transform:translate3d(0,14px,0)}}

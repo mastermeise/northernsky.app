@@ -35,8 +35,8 @@ The landing page plays a four-second wake on load (`body.wake`, ruled 2026-09-05
 with 150 stars out, the night thins into the app's **predawn** sky, predawn thins into the day, the
 sun rises at the horizon, the stars dim to a faint twinkle that stays, Polaris blooms high right
 with a warm glow, the wordmark resolves letter by letter, then each block rises in order.
-Afterwards the twinkle, the sun's drift, the glow's pulse and the breath never stop. The star in
-the mark is white on every page; the wordmark takes the page's ink.
+Afterwards the twinkle, the sun's drift, the glow's pulse and the breath never stop. The mark,
+wordmark and star, is white on every page.
 
 - Transform and opacity only, like the app: layers crossfade, nothing animates a gradient stop.
 - The mark sits high right on every page, where the star sits on the icon. The other pages get
