@@ -9,9 +9,12 @@
   --sun:#FFDE7C;                         /* day.sky.sun.color */
   --sun-rim:rgb(255 245 214 / 45%);      /* day.sky.sun.rim at 45% — the edge goes through cream, never grey */
   --sun-out:rgb(255 245 214 / 0);
-  --night-top:#121A48;                   /* daybreak.stations.predawn.sky.stops — the sky before it wakes */
+  --night-top:#121A48;                   /* daybreak.stations.predawn.sky.stops — the dawn layer of the wake */
   --night-mid:#1F2C74;
   --night-low:#3C4E9E;
+  --deep-top:#080C24;                    /* predawn pulled toward black — the page's own, where the wake starts */
+  --deep-mid:#101743;
+  --deep-low:#222D6E;
   --star:#F3F0EB;                        /* inkOnDark — the stars belong to the night layer */
   --star-warm:#FFF3D6;                   /* a few stars carry the slight yellow the brand brief allows */
   --ink:#1A1A18;                         /* ink */
@@ -40,12 +43,12 @@ a{color:inherit}
    day station; the sun is a radial whose centre sits below the frame, drawn with the ramp
    DaybreakGround and the icon draw: the core, the rim at 34%, nothing at 72%.
 
-   The landing page wakes on load (body.wake): it opens on the predawn sky with the stars
-   out, the night thins over three seconds and the day comes through it, the sun rises at
-   the horizon, the stars go with the night, Polaris blooms high right, the wordmark
-   resolves letter by letter, then the page rises. Afterwards the sun's drift, the glow's
-   pulse and the breath never stop. Under reduced motion every intro is skipped and the
-   page sits at rest, in daylight. */
+   The landing page wakes on load (body.wake): it opens on a deep night with the stars out,
+   the night thins into predawn, predawn thins into the day, the sun rises at the horizon,
+   the stars dim to a faint twinkle that stays, Polaris blooms high right, the wordmark
+   resolves letter by letter, then the page rises. Afterwards the twinkle, the sun's drift,
+   the glow's pulse and the breath never stop. Under reduced motion every intro is skipped
+   and the page sits at rest, in daylight with the faint stars. */
 .sky{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
 .sky .layer{position:absolute;inset:0}
 .day{background:linear-gradient(to bottom,var(--sky-top) -6%,var(--sky-mid) 54%,var(--sky-low) 104%)}
@@ -56,24 +59,29 @@ a{color:inherit}
 .wake .horizon{animation:appear 2.6s ease .9s both,horizon-drift 52s ease-in-out 3.3s infinite alternate}
 @keyframes appear{from{opacity:0}}
 @keyframes horizon-drift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-3vw,-2vh,0) scale(1.06)}}
-/* The predawn sky, with its own first warmth below the horizon: predawn.sky.sun at strength .65,
-   core → mid at 28% → rim at 54% → nothing at 76%. Sits on top, gone at rest. */
-.night{
+/* The two skies before the day, stacked on top of it and gone at rest. `dawn` is the app's
+   predawn station with its own first warmth below the horizon (predawn.sky.sun at strength
+   .65: core → mid at 28% → rim at 54% → nothing at 76%); `night` is that sky before any
+   warmth, deeper still. The wake thins the night into the dawn, then the dawn into the day,
+   so the page starts dark and only gets lighter. */
+.dawn{
   opacity:0;
   background:
     radial-gradient(circle 38vmax at 50% 124%,rgb(240 158 90 / 65%) 0%,rgb(176 98 138 / 55%) 28%,rgb(90 76 152 / 27%) 54%,rgb(90 76 152 / 0) 76%),
     linear-gradient(to bottom,var(--night-top) -6%,var(--night-mid) 54%,var(--night-low) 104%);
 }
-.wake .night{animation:settle 3.4s ease-in-out 0s both}
+.night{opacity:0;background:linear-gradient(to bottom,var(--deep-top) -6%,var(--deep-mid) 54%,var(--deep-low) 104%)}
+.wake .night{animation:settle 2.4s ease-in-out .2s both}
+.wake .dawn{animation:settle 3.2s ease-in-out 1.6s both}
 @keyframes settle{from{opacity:1}to{opacity:0}}
 
 /* Stars: each one owns its position, size, base brightness, wake delay and twinkle period
    (set as custom properties by the script). Wake is opacity+scale from nothing; twinkle
-   takes over the instant wake ends. They belong to the night: the field goes out with it
-   during the wake, and at rest (other pages, reduced motion) there are none. */
-.stars{position:absolute;inset:0;opacity:0}
-.wake .stars{animation:starsout 1.4s ease 2.4s both}
-@keyframes starsout{from{opacity:1}to{opacity:0}}
+   takes over the instant wake ends. The field is at full strength on the night and dims
+   with it, but never goes out: a faint twinkle stays on the day sky. */
+.stars{position:absolute;inset:0;opacity:.4}
+.wake .stars{animation:starsdim 2.6s ease 2.2s both}
+@keyframes starsdim{from{opacity:1}to{opacity:.4}}
 .star{
   position:absolute;left:var(--x);top:var(--y);width:var(--s);height:var(--s);border-radius:50%;
   background:var(--star);opacity:var(--o);will-change:opacity,transform;
@@ -100,7 +108,7 @@ a{color:inherit}
   to{transform:translate3d(6vw,-5vh,0) scale(1.12)}
 }
 @media (prefers-reduced-motion:reduce){
-  .breath::before,.night,.horizon,.stars,.star,.polaris svg,.glow,.word span,.rise{animation:none !important}
+  .breath::before,.night,.dawn,.horizon,.stars,.star,.polaris svg,.glow,.word span,.rise{animation:none !important}
 }
 
 /* ---------- shared chrome ---------- */
@@ -115,7 +123,7 @@ header .wrap{display:flex;justify-content:flex-end}
 .word span{display:inline-block;white-space:pre}
 .wake .word span{animation:resolve .7s cubic-bezier(.2,.7,.2,1) calc(2.35s + var(--i) * 45ms) both}
 @keyframes resolve{from{opacity:0;transform:translate3d(0,5px,0)}}
-.polaris{position:relative;width:26px;height:26px;display:grid;place-items:center}
+.polaris{position:relative;width:26px;height:26px;display:grid;place-items:center;color:var(--star)} /* the star stays white on every sky; the wordmark keeps the page's ink */
 .polaris svg{position:relative;width:26px;height:26px;display:block}
 .wake .polaris svg{animation:bloom 1.5s cubic-bezier(.2,.7,.2,1) 1.7s both}
 @keyframes bloom{from{opacity:0;transform:scale(.4)}}
@@ -134,7 +142,7 @@ footer a:hover{color:var(--ink);border-color:var(--ink)}
 /* ---------- the landing page: everything above the fold ---------- */
 .shell{position:relative;z-index:1;min-height:100svh;display:flex;flex-direction:column}
 /* The page follows the star up: each block carries its own --i. At rest it is simply there. */
-.wake .rise{animation:rise 1s cubic-bezier(.2,.7,.2,1) calc(3.05s + var(--i) * 150ms) both}
+.wake .rise{animation:rise 1s cubic-bezier(.2,.7,.2,1) calc(3.4s + var(--i) * 150ms) both}
 @keyframes rise{from{opacity:0;transform:translate3d(0,14px,0)}}
 .hero{flex:1;display:flex;align-items:center}
 .hero .wrap{max-width:640px;text-align:center;padding-top:16px;padding-bottom:32px}

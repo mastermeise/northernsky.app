@@ -31,19 +31,20 @@ pending sign-off, like the app's own door copy.
 ## The sky wakes
 
 The landing page plays a four-second wake on load (`body.wake`, ruled 2026-09-05 from the
-"First light" concept, re-choreographed 2026-09-06 as a sunrise): the page opens on the
-**predawn** sky with 150 stars out, the night thins over three seconds and the day comes through
-it, the sun rises at the horizon, the stars go with the night, Polaris blooms high right with a
-warm glow, the wordmark resolves letter by letter, then each block rises in order. Afterwards the
-sun's drift, the glow's pulse and the breath never stop.
+"First light" concept, re-choreographed 2026-09-06 as a sunrise): the page opens on a deep night
+with 150 stars out, the night thins into the app's **predawn** sky, predawn thins into the day, the
+sun rises at the horizon, the stars dim to a faint twinkle that stays, Polaris blooms high right
+with a warm glow, the wordmark resolves letter by letter, then each block rises in order.
+Afterwards the twinkle, the sun's drift, the glow's pulse and the breath never stop. The star in
+the mark is white on every page; the wordmark takes the page's ink.
 
 - Transform and opacity only, like the app: layers crossfade, nothing animates a gradient stop.
 - The mark sits high right on every page, where the star sits on the icon. The other pages get
   the resting glow and no intro.
 - Stars are seeded by the script in `index.html`; each carries its numbers as custom properties
-  the stylesheet reads. They belong to the night layer: gone once the day is through, and absent
-  at rest. Under `prefers-reduced-motion` every intro is skipped and the page sits at rest, in
-  daylight.
+  the stylesheet reads. They are at full strength on the night and dim with it to a faint field
+  that never goes out. Under `prefers-reduced-motion` every intro is skipped and the page sits at
+  rest, in daylight with the faint stars.
 - The glow was ruled at about a third under the first cut; the concepts and the tuning live in
   the "Northern Sky Wake-Up" artifact.
 
