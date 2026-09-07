@@ -15,6 +15,11 @@ Marketing and legal site for **Northern Sky**, a morning check-in for iPhone (th
 | `site.css` | One stylesheet for all four pages. |
 | `img/` | Favicons and the touch icon, downsized from the app icon. |
 
+The lede's "Tomorrow, it asks whether you did it." is deliberately not a third question
+(2026-09-06): it is a handwritten margin note in Caveat with a drawn arrow pointing back at
+the first question. Caveat is the one face off Plus Jakarta Sans on the site, loaded on
+`index.html` alone, and it exists only for that note. Don't set anything else in it.
+
 ## Where the values come from
 
 The ground is the app's Daybreak **day** station — C2 Deep, ruled 2026-09-06: cobalt overhead,

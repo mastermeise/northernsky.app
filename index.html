@@ -17,7 +17,7 @@
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="site.css">
 </head>
 <body class="wake">
@@ -47,7 +47,16 @@
     <div class="wrap">
       <p class="eyebrow rise" style="--i:0">Coming to iPhone</p>
       <h1 class="rise" style="--i:1">Two questions, every morning.</h1>
-      <p class="lede rise" style="--i:2">What's the one thing you'll do today? What are you thankful for? Tomorrow, it asks whether you did it.</p>
+      <div class="lede rise" style="--i:2">
+        <p class="q">What's the one thing you'll do today?</p>
+        <p class="q">What are you thankful for?</p>
+        <!-- Not a third question: a note in the margin, pointing back at the first one. -->
+        <svg class="arrow rise" style="--i:4" viewBox="0 0 44 60" aria-hidden="true">
+          <path d="M 8 56 C 20 55, 34 48, 36 34 S 36 20, 32 12"/>
+          <path d="M 29.5 22.5 L 32 12 L 40 19.5"/>
+        </svg>
+        <p class="hand rise" style="--i:4"><span>Tomorrow, it asks<br>whether you did it.</span></p>
+      </div>
 
       <form class="capture rise" style="--i:3" id="capture" novalidate>
         <div class="row">
