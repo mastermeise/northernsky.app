@@ -9,9 +9,9 @@ Marketing and legal site for **Northern Sky**, a morning check-in for iPhone (th
 | File | Purpose |
 | --- | --- |
 | `index.html` | The whole landing page above the fold: headline, one sentence, email capture. Coming-soon state; the App Store button replaces the form at launch. |
-| `privacy.html` | Privacy policy. Required by App Store Connect and by Google's OAuth brand verification. Linked from the app's paywall and Settings (`Legal` in `Store/Subscription.swift`). |
-| `terms.html` | Terms of use. Same links. |
-| `support.html` | Support URL for the App Store listing. Its FAQ carries the question-shaped queries (missed day, streaks, price, lapse). |
+| `privacy.html` | Privacy policy. Required by App Store Connect. Linked from the app's Settings (`Legal` in `Lib/Legal.swift`). Rewritten 2026-09-19 for the free, local app: no accounts, no sync, TelemetryDeck named as the one analytics service. Any change to what the app sends changes this page in the same sitting. |
+| `terms.html` | Terms of use. Same link. No subscription section since 2026-09-19. |
+| `support.html` | Support URL for the App Store listing. Its FAQ carries the question-shaped queries (missed day, streaks, price). |
 | `without-streaks.html` | Why there is no streak. The one page built to rank ("habit tracker without streaks", "journaling app without streaks") and the piece to share on Reddit. Added 2026-09-06 from the landscape study (`listing/competitive-landscape.md` in the app repo, §7). |
 | `did-you.html` | The morning-after question, for the long-tail phrase "an app that asks if you did what you said you would". |
 | `one-thing.html` | Why one question, not a list. |
@@ -22,7 +22,7 @@ Marketing and legal site for **Northern Sky**, a morning check-in for iPhone (th
 
 Internal links are extensionless (`support`, not `support.html`): GitHub Pages serves `/support` from `support.html`, the canonical tags, the sitemap and the app all use that form, and one spelling keeps search engines from seeing two addresses per page. Every page carries the same footer, with a link to every page.
 
-Every page carries the Smart App Banner (`apple-itunes-app`, app id 6809014456); Safari shows it only once the app is on the store. No `apple-app-site-association` yet: the magic link uses the custom scheme and nothing else needs a universal link. Prices on the pages are $2.99 a month / $19.99 a year (ruled 2026-09-06); change them here and in the app repo's `copy.ts` together. The four new pages' copy is DRAFT like the rest, pending Brian's read.
+Every page carries the Smart App Banner (`apple-itunes-app`, app id 6809014456); Safari shows it only once the app is on the store. No `apple-app-site-association`: nothing needs a universal link. The app is free (ruled 2026-09-19; it was $2.99 a month / $19.99 a year with a free week until then), and every page that named a price now says so in one word. The four search pages' copy is DRAFT like the rest, pending Brian's read.
 
 The lede's "Tomorrow, it asks whether you did it." is deliberately not a third question
 (2026-09-06): it is a handwritten margin note in Caveat with a drawn arrow pointing back at
