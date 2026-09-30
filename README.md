@@ -8,7 +8,7 @@ Marketing and legal site for **Northern Sky**, a morning check-in for iPhone (th
 
 | File | Purpose |
 | --- | --- |
-| `index.html` | The whole landing page above the fold: headline, one sentence, email capture. Coming-soon state; the App Store button replaces the form at launch. |
+| `index.html` | The whole landing page above the fold: headline, the two questions, the App Store link. The email capture it launched with came down on launch day, 2026-09-30. |
 | `privacy.html` | Privacy policy. Required by App Store Connect. Linked from the app's Settings (`Legal` in `Lib/Legal.swift`). Rewritten 2026-09-19 for the free, local app: no accounts, no sync, TelemetryDeck named as the one analytics service. Any change to what the app sends changes this page in the same sitting. |
 | `terms.html` | Terms of use. Same link. No subscription section since 2026-09-19. |
 | `support.html` | Support URL for the App Store listing. Its FAQ carries the question-shaped queries (missed day, streaks, price). |
@@ -18,11 +18,12 @@ Marketing and legal site for **Northern Sky**, a morning check-in for iPhone (th
 | `five-minute-journal-alternative.html` | Honest comparison with the Five Minute Journal app; the proven "alternative to X" page type. Facts about their app are from its App Store listing, September 2026; re-check when it changes. |
 | `sitemap.xml`, `robots.txt` | Submit the sitemap to Google Search Console and Bing Webmaster Tools (Brian's accounts) once; re-check `site:northernsky.app` at 30 and 90 days. |
 | `site.css` | One stylesheet for every page. |
+| `store.js` | The per-channel campaign handler for the App Store link; loaded by every page that carries the link. See below. |
 | `img/` | Favicons and the touch icon, downsized from the app icon. |
 
 Internal links are extensionless (`support`, not `support.html`): GitHub Pages serves `/support` from `support.html`, the canonical tags, the sitemap and the app all use that form, and one spelling keeps search engines from seeing two addresses per page. Every page carries the same footer, with a link to every page.
 
-Every page carries the Smart App Banner (`apple-itunes-app`, app id 6809014456); Safari shows it only once the app is on the store. No `apple-app-site-association`: nothing needs a universal link. The app is free (ruled 2026-09-19; it was $2.99 a month / $19.99 a year with a free week until then), and every page that named a price now says so in one word. The four search pages' copy is DRAFT like the rest, pending Brian's read.
+Every page carries the Smart App Banner (`apple-itunes-app`, app id 6809014456); it has shown in Safari since the app went live on 2026-09-30. No `apple-app-site-association`: nothing needs a universal link. The app is free (ruled 2026-09-19; it was $2.99 a month / $19.99 a year with a free week until then), and every page that named a price now says so in one word. The four search pages' copy is DRAFT like the rest, pending Brian's read.
 
 The lede's "Tomorrow, it asks whether you did it." is deliberately not a third question
 (2026-09-06): it is a handwritten margin note in Caveat with a drawn arrow pointing back at
@@ -39,8 +40,8 @@ pill is ink with white text; the face is Plus Jakarta Sans 400/500/600. All of i
 change there first, then here. The favicons and the touch icon are the app icon, downsized
 (`npm run icon` in the app repo draws it from the same tokens). The copy follows the
 app's register (`src/lib/copy.ts`): sentence case, no exclamation marks, never cheerful at you.
-Draft status: the headline, the lede, the button label, and the expectation sentence are DRAFT
-pending sign-off, like the app's own door copy.
+Draft status: the headline, the lede, the eyebrow ("For iPhone"), the store button's label and the
+line under it are DRAFT pending sign-off, like the app's own door copy.
 
 ## The sky wakes
 
@@ -62,13 +63,22 @@ wordmark and star, is white on every page.
 - The glow was ruled at about a third under the first cut; the concepts and the tuning live in
   the "Northern Sky Wake-Up" artifact.
 
-## Email capture
+## The App Store link
 
-The form POSTs to the app's Supabase project (`waitlist` table, migration
-`supabase/migrations/20260905000003_waitlist.sql` in the app repo). The key on the page is the
-project's publishable identifier: the table grants `anon` insert only and RLS lets nothing be read
-back, so the page cannot list addresses. A duplicate address returns 409 and reads as success.
-No JavaScript, no honeypot trip, or a network failure all fall to the same calm line.
+The landing page's one ask, and the close of the four search pages: an ink pill with Apple's mark
+to `https://apps.apple.com/app/apple-store/id6809014456?pt=129208576&ct=website&mt=8`, the same
+pattern as greenonions.app. `pt` is the account's provider token (same Apple team as Green Onions);
+`ct=website` is the default campaign. Hand out short `northernsky.app/?s=<channel>` addresses (any
+page takes it: `/without-streaks?s=reddit`) and `store.js` rewrites `ct` to the channel; anything
+outside `[a-z0-9-]{1,30}` falls back to `website`. With JavaScript off the baked-in link still
+works. `data-goatcounter-click="cta-appstore"` counts the tap in GoatCounter, with the page it came
+from as the referrer. Per-channel conversion = GoatCounter visits for `?s=` → taps → App Store
+Connect's product page views and downloads for that campaign.
+
+The email capture it replaced (launch list, 2026-09-05 → 2026-09-30) posted to the `waitlist`
+table in the app's Supabase project (migration `supabase/migrations/20260905000003_waitlist.sql`
+in the app repo). The table and its addresses are still there; `privacy.html` describes them and
+must keep doing so until the list is deleted.
 
 ## Deploying
 

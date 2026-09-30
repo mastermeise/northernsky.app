@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Northern Sky — Two questions, every morning.</title>
-<meta name="description" content="A morning check-in for iPhone. What's the one thing you'll do today? What are you thankful for? Tomorrow, it asks whether you did it. Coming soon.">
+<meta name="description" content="A morning check-in for iPhone. What's the one thing you'll do today? What are you thankful for? Tomorrow, it asks whether you did it. Free on the App Store.">
 <meta property="og:title" content="Northern Sky — Two questions, every morning.">
 <meta property="og:description" content="A morning check-in for iPhone. What's the one thing you'll do today? What are you thankful for? Tomorrow, it asks whether you did it.">
 <meta property="og:type" content="website">
@@ -46,7 +46,7 @@
 
   <main class="hero">
     <div class="wrap">
-      <p class="eyebrow rise" style="--i:0">Coming to iPhone</p>
+      <p class="eyebrow rise" style="--i:0">For iPhone</p>
       <h1 class="rise" style="--i:1">Two questions, every morning.</h1>
       <div class="lede rise" style="--i:2">
         <p class="q">What's the one thing you'll do today?</p>
@@ -59,16 +59,20 @@
         <p class="hand rise" style="--i:4"><span>Tomorrow, it asks<br>whether you did it.</span></p>
       </div>
 
-      <form class="capture rise" style="--i:3" id="capture" novalidate>
-        <div class="row">
-          <label class="hp" for="website">Leave this empty</label>
-          <input class="hp" type="text" id="website" name="website" tabindex="-1" autocomplete="off">
-          <input type="email" id="email" name="email" placeholder="Your email" required
-                 autocomplete="email" autocapitalize="off" spellcheck="false" aria-label="Your email">
-          <button class="pill" type="submit" data-goatcounter-click="waitlist">Tell me when it's out</button>
-        </div>
-        <p class="note" id="note" aria-live="polite">One note when it's out, the occasional one after. Unsubscribe anytime.</p>
-      </form>
+      <!-- The App Store link replaced the email capture at launch (2026-09-30). pt=129208576 is
+           the account's provider token, the same for every channel; ct=website is the default
+           campaign, which store.js swaps per channel (northernsky.app/?s=reddit → ct=reddit).
+           Keep data-store-link (what store.js looks for) and data-goatcounter-click (GoatCounter
+           counts the tap on its way out, so a gap between visits and Apple's page views can be
+           told apart from nobody tapping). The same link closes the four search pages. -->
+      <div class="get rise" style="--i:3">
+        <a class="cta" data-store-link data-goatcounter-click="cta-appstore"
+           href="https://apps.apple.com/app/apple-store/id6809014456?pt=129208576&amp;ct=website&amp;mt=8">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zm3.24-2.916c.83-1.014 1.404-2.42 1.25-3.822-1.207.049-2.664.805-3.523 1.816-.771.9-1.443 2.34-1.264 3.72 1.35.104 2.723-.688 3.537-1.714z"/></svg>
+          Get it on the App Store
+        </a>
+        <p class="note">Free. Everything you write stays on your phone.</p>
+      </div>
     </div>
   </main>
 
@@ -118,50 +122,8 @@
   }
   stars.appendChild(frag);
 })();
-
-// The waitlist is one table in the app's Supabase project. The key is the
-// project's publishable identifier, not a secret; the table grants anon
-// insert only, and RLS lets nothing be read back. A duplicate email comes
-// back 409 and is treated as already on the list.
-(function () {
-  var URL = 'https://xiwggtpiqnsiargtiham.supabase.co/rest/v1/waitlist';
-  var KEY = 'sb_publishable_mRfgL_a6vdINKT1QcsDXOg_ihpGNKJz';
-  var COPY = {
-    expectation: 'One note when it’s out, the occasional one after. Unsubscribe anytime.',
-    invalid: 'That doesn’t look like an email address.',
-    done: 'You’re on the list.',
-    failed: 'That didn’t send. Try once more.'
-  };
-  var form = document.getElementById('capture');
-  var email = document.getElementById('email');
-  var note = document.getElementById('note');
-  var button = form.querySelector('.pill');
-
-  function say(state, text) { note.dataset.state = state; note.textContent = text; }
-
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    if (form.website.value) return;               // honeypot
-    var value = email.value.trim();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) { say('error', COPY.invalid); email.focus(); return; }
-    button.disabled = true;
-    fetch(URL, {
-      method: 'POST',
-      headers: {
-        'apikey': KEY,
-        'Authorization': 'Bearer ' + KEY,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify({ email: value.toLowerCase(), source: 'northernsky.app' })
-    }).then(function (r) {
-      if (r.ok || r.status === 409) { say('done', COPY.done); form.reset(); }
-      else { say('error', COPY.failed); button.disabled = false; }
-    }).catch(function () { say('error', COPY.failed); button.disabled = false; });
-  });
-  email.addEventListener('input', function () { if (note.dataset.state === 'error') say('', COPY.expectation); });
-})();
 </script>
+<script src="store.js"></script>
 
 <!-- GoatCounter: cookieless page counts, no personal data. Disclosed under
      "This website" in /privacy.html; change both together. -->
