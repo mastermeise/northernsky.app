@@ -9,7 +9,7 @@ Marketing and legal site for **Northern Sky**, a morning check-in for iPhone (th
 | File | Purpose |
 | --- | --- |
 | `index.html` | The whole landing page above the fold: headline, the two questions, the App Store link. The email capture it launched with came down on launch day, 2026-09-30. |
-| `privacy.html` | Privacy policy. Required by App Store Connect. Linked from the app's Settings (`Legal` in `Lib/Legal.swift`). Rewritten 2026-09-19 for the free, local app: no accounts, no sync, TelemetryDeck named as the one analytics service. Any change to what the app sends changes this page in the same sitting. |
+| `privacy.html` | Privacy policy. Required by App Store Connect. Linked from the app's Settings (`Legal` in `Lib/Legal.swift`). Rewritten 2026-09-19 for the free, local app: no accounts, no sync, TelemetryDeck named as the one analytics service. Any change to what the app sends changes this page in the same sitting. Since 2026-11-11 "What the app counts" also lists what the TelemetryDeck SDK sends by itself, read from its source at 2.14.2 (`DefaultSignalPayload` in `Signals/Signal.swift`, the `Session.started` and `Acquisition.newInstallDetected` signals): when the app moves to a new SDK version, re-read that file against the list. |
 | `terms.html` | Terms of use. Same link. No subscription section since 2026-09-19. |
 | `support.html` | Support URL for the App Store listing. Its FAQ carries the question-shaped queries (missed day, streaks, price). |
 | `without-streaks.html` | Why there is no streak. The one page built to rank ("habit tracker without streaks", "journaling app without streaks") and the piece to share on Reddit. Added 2026-09-06 from the landscape study (`listing/competitive-landscape.md` in the app repo, §7). |

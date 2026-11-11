@@ -33,7 +33,7 @@
 <main class="doc">
   <div class="wrap">
     <h1>Privacy Policy</h1>
-    <p class="updated">Effective November 10, 2026</p>
+    <p class="updated">Effective November 11, 2026</p>
 
     <div class="short">
       <p>Northern Sky keeps what you write on your phone, and nowhere else. The app counts three things about itself, that it was opened, that a morning was finished, and whether you turned the reminder on, and never what you wrote. Nothing is sold, nothing is shown to advertisers.</p>
@@ -47,13 +47,23 @@
     <p>The app works fully offline, and a morning with no connection is still a morning.</p>
 
     <h2>What the app counts</h2>
-    <p>We want to know whether people use Northern Sky, so the app reports three things to an analytics service: that it was opened, that a morning was finished, and how you answered when it offered a morning reminder (turned it on, said no to the notification prompt, or chose not now). It offers the reminder at most twice. Each report carries an anonymous identifier made from your device, hashed so that it cannot be turned back into anything about you, along with the kind of phone, its iOS version, the app's version, and your language and time zone. It never carries a commitment, your answer about one, a gratitude, or the time you chose for a reminder, and never your name or email, because the app does not have them.</p>
-    <p>That is the list. There are no photos, no location, no contacts, no health data, and no advertising identifier.</p>
+    <p>We want to know whether people use Northern Sky, so the app reports three things to an analytics service: that it was opened, that a morning was finished, and how you answered when it offered a morning reminder (turned it on, said no to the notification prompt, or chose not now). It offers the reminder at most twice. The analytics service's code in the app also sends two reports of its own: one each time you start using the app, on a fresh launch or on coming back after five minutes or more away, and one the first time the app runs, saying it is a new install.</p>
+    <p>Every report carries the same details, which that code gathers by itself:</p>
+    <ul>
+      <li><strong>An anonymous identifier</strong> made from your device, hashed so that it cannot be turned back into anything about you, and a random number for the current session.</li>
+      <li><strong>Your phone:</strong> its model, its iOS version, its chip type, the size and sharpness of its screen, and whether it was held upright or sideways.</li>
+      <li><strong>The app:</strong> its version and build number, whether it came from the App Store or is a test copy, and the version of the analytics code.</li>
+      <li><strong>When:</strong> the date and time, and from them the hour, the day of the week, of the month and of the year, the week, month and quarter, and whether it was a weekend.</li>
+      <li><strong>Your settings:</strong> your language and region, your time zone, light or dark mode, whether text runs left to right, your text size, and whether Reduce Motion, Bold Text, Increase Contrast, Reduce Transparency, Differentiate Without Colour or inverted colours are on.</li>
+      <li><strong>How much you use it:</strong> the date you first opened it, how many sessions you have had, how long the last one lasted and how long they last on average, and on how many days you have used it, in all and in the last month.</li>
+    </ul>
+    <p>No report carries a commitment, your answer about one, a gratitude, or the time you chose for a reminder, and none carries your name or email, because the app does not have them.</p>
+    <p>That is the list. There are no photos, no contacts, no health data, no advertising identifier, and nothing about where you are beyond the region and time zone your phone is set to.</p>
 
     <h2>Who else handles it</h2>
     <p>We keep the list of companies short and use each one for one job.</p>
     <ul>
-      <li><strong>TelemetryDeck</strong> receives the three counts described above and shows us the totals: how many people opened the app today, how many finished a morning this month, how many turned the reminder on. It is built to hold no personal data, and it does not. <a href="https://telemetrydeck.com/privacy/">TelemetryDeck's privacy policy</a>.</li>
+      <li><strong>TelemetryDeck</strong> receives the reports described above, with the details each one carries, and shows us the totals: how many people opened the app today, how many finished a morning this month, how many turned the reminder on. It is built to hold no personal data, and it does not. <a href="https://telemetrydeck.com/privacy/">TelemetryDeck's privacy policy</a>.</li>
       <li><strong>Apple</strong> distributes the app through the App Store and, if you have chosen to share analytics with developers in your iPhone's settings, tells us in aggregate how many people installed it. <a href="https://www.apple.com/legal/privacy/">Apple's privacy policy</a>.</li>
       <li><strong>Supabase</strong> holds the launch list: the email addresses people gave us on this website's front page before Northern Sky came out, and nothing else. <a href="https://supabase.com/privacy">Supabase's privacy policy</a>.</li>
       <li><strong>An email service</strong> sends the occasional note we write about Northern Sky, to people who gave us their address for that. We use Resend for this. <a href="https://resend.com/legal/privacy-policy">Resend's privacy policy</a>.</li>
