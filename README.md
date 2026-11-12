@@ -77,8 +77,12 @@ Connect's product page views and downloads for that campaign.
 
 The email capture it replaced (launch list, 2026-09-05 → 2026-09-30) posted to the `waitlist`
 table in the app's Supabase project (migration `supabase/migrations/20260905000003_waitlist.sql`
-in the app repo). The table and its addresses are still there; `privacy.html` describes them and
-must keep doing so until the list is deleted.
+in the app repo). The table and its addresses are still there (the project is paused, not
+deleted); `privacy.html` describes them and must keep doing so until the list is deleted. Nothing
+was ever sent to the list: Resend was never set up and the launch note was dropped on 2026-11-07.
+Since 2026-11-12 the page says exactly that, with no email service, no unsubscribe link and the
+addresses kept until someone asks for theirs to be deleted. If the list is ever deleted, the
+Supabase bullet, the Email section and the launch-list retention line come out together.
 
 ## Deploying
 
